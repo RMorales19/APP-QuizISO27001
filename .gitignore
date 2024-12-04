@@ -1,2 +1,4 @@
 venv/
 db.sqlite3
+iso_verification/settings.py
+/iso_verification/__pycache__
