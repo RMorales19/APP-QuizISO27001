@@ -11,8 +11,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('social_django.urls', namespace='social')),
     path('login/', TemplateView.as_view(template_name='login.html'), name='login'),
-    path('logout/', logout_all_users, name='logout'),
+    path('logout/', logout_view, name='logout'),
     
-    path('accounts/quiz/', login_required(TemplateView.as_view(template_name='quiz.html')), name='quiz'),
+    path('accounts/quiz/', login_required(quiz_view), name='quiz'),
+    path('accounts/quiz/results/', login_required(quiz_complete), name='quiz_complete'),
     path('', RedirectView.as_view(pattern_name='quiz', permanent=False)),
 ]

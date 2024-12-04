@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados del Cuestionario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<!-- Botón de Logout posicionado en la esquina superior derecha, color rojo -->
+<a href="{% url 'logout' %}" class="btn btn-danger position-absolute top-0 end-0 mt-3 me-3">Logout</a>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Resultados del Cuestionario</h1>
+
+    <!-- Gráfico resumen -->
+    <div class="mb-5">
+        <h2 class="text-center">Resumen General por Clasificación</h2>
+        <canvas id="summary-chart"></canvas>
+        <script>
+            const summaryCtx = document.getElementById('summary-chart').getContext('2d');
+            new Chart(summaryCtx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for classification in classification_counts.keys %}'{{ classification.name }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+                    datasets: [
+                        {
+                            label: 'Correctas',
+                            data: [{% for counts in classification_counts.values %}{{ counts.si }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                            backgroundColor: '#28a745'
+                        },
+                        {
+                            label: 'Incorrectas',
+                            data: [{% for counts in classification_counts.values %}{{ counts.no }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                            backgroundColor: '#dc3545'
+                        },
+                        {
+                            label: 'Parciales',
+                            data: [{% for counts in classification_counts.values %}{{ counts.parcialmente }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                            backgroundColor: '#ffc107'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribución de Respuestas por Clasificación'
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Cantidad de Respuestas'
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    </div>
+
+    <!-- Gráficos por clasificación -->
+    <div class="row">
+        {% for classification, counts in classification_counts.items %}
+        <div class="col-md-6 mb-4">
+            <h3 class="text-center">{{ classification.name }}</h3>
+            <canvas id="chart-{{ forloop.counter }}"></canvas>
+            <script>
+                const ctx{{ forloop.counter }} = document.getElementById('chart-{{ forloop.counter }}').getContext('2d');
+                new Chart(ctx{{ forloop.counter }}, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Correctas', 'Incorrectas', 'Parciales'],
+                        datasets: [{
+                            data: [{{ counts.si }}, {{ counts.no }}, {{ counts.parcialmente }}],
+                            backgroundColor: ['#28a745', '#dc3545', '#ffc107'],
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Distribución de respuestas'
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Tablas por clasificación -->
+    {% for classification, responses in grouped_responses.items %}
+    <div class="mt-5">
+        <h2>{{ classification.name }}</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Pregunta</th>
+                    <th>Respuesta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for response in responses.si %}
+                <tr class="table-success">
+                    <td>{{ response.question.text }}</td>
+                    <td>Se Cumple</td>
+                </tr>
+                {% endfor %}
+                {% for response in responses.parcialmente %}
+                <tr class="table-warning">
+                    <td>{{ response.question.text }}</td>
+                    <td>En Proceso</td>
+                </tr>
+                {% endfor %}
+                {% for response in responses.no %}
+                <tr class="table-danger">
+                    <td>{{ response.question.text }}</td>
+                    <td>No se Cumple</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

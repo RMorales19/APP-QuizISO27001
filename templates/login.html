@@ -101,6 +101,11 @@
   </style>
 </head>
 <body>
+  {% if messages %}
+    {% for message in messages %}
+        <div class="{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
   <div class="container">
     <h1>Verificación del cumplimiento ISO27001</h1>
     <div class="social-login">
