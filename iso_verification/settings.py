@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+# Import dj-database-url at the beginning of the file.
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,13 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4ks6t1s%7g(kqqyg@(egrs-i%u6c%$pmi!f&33irkya=di-s&6'
+SECRET_KEY = os.environ.get('SECRET_KEY', default='your secret key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+# Agregar el hostname de Render
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 
@@ -39,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
+    'iso_verification',
 ]
 
 MIDDLEWARE = [
@@ -75,12 +82,21 @@ WSGI_APPLICATION = 'iso_verification.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+"""
+# Replace the SQLite DATABASES configuration with PostgreSQL:
+DATABASES = {
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://postgres:postgres@localhost:5432/iso_verification',
+        conn_max_age=600
+    )
 }
 
 
@@ -130,10 +146,10 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'Google Client ID'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Google Client Secret'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI')
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "http://127.0.0.1:8000/auth/complete/google-oauth2/"
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
 
@@ -142,5 +158,6 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = '/accounts/quiz/'
-
+SESSION_COOKIE_AGE = 3600  # Tiempo en segundos (ejemplo: 1 hora)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'

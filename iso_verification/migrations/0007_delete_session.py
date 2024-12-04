@@ -28,6 +28,81 @@ def add_additional_data(apps, schema_editor):
             topic=topic
         )
 
+    classification = Classification.objects.get(id=3)
+
+    questions_data = [
+        ("7.1 Perímetros físicos de seguridad", "¿Los perímetros de seguridad están definidos y se utilizan para proteger las áreas que contienen información y otros activos asociados?"),
+        ("7.2 Entrada física", "¿Las áreas seguras están protegidas por controles de entrada y puntos de acceso apropiados?"),
+        ("7.3 Asegurar oficinas, salas e instalaciones", "¿Se ha diseñado e implementado la seguridad física de las oficinas, salas e instalaciones?"),
+        ("7.4 Monitoreo de seguridad física", "¿Los locales son monitoreados continuamente para detectar el acceso físico no autorizado?"),
+        ("7.5 Protección contra amenazas físicas y ambientales", "¿Se ha diseñado e implementado la protección contra amenazas físicas y ambientales, tales como desastres naturales y otras amenazas físicas intencionales o no intencionales a la infraestructura?"),
+        ("7.6 Trabajar en áreas seguras", "¿Se han diseñado e implementado medidas de seguridad para trabajar en áreas seguras?"),
+        ("7.7 Escritorio despejado y pantalla despejada", "¿Se han definido y se hacen cumplir adecuadamente las reglas de escritorio limpio para documentos y medios de almacenamiento extraíbles y las reglas de pantalla limpia para las instalaciones de procesamiento de información?"),
+        ("7.8 Emplazamiento y protección de equipos", "¿El equipo está colocado de forma segura y protegido?"),
+        ("7.9 Seguridad de los activos fuera de las instalaciones", "¿Los activos fuera del sitio están protegidos?"),
+        ("7.10 Medios de almacenamiento", "¿Los medios de almacenamiento se gestionan a lo largo de su ciclo de vida de adquisición, uso, transporte y eliminación de acuerdo con el esquema de clasificación y los requisitos de manipulación de la organización?"),
+        ("7.11 Utilidades de apoyo", "¿Las instalaciones de procesamiento de información están protegidas contra cortes de energía y otras interrupciones causadas por fallas en los servicios públicos de apoyo?"),
+        ("7.12 Seguridad del cableado", "¿Los cables que transportan energía, datos o servicios de información de apoyo están protegidos contra intercepciones, interferencias o daños?"),
+        ("7.13 Mantenimiento de equipo", "¿El equipo se mantiene correctamente para garantizar la disponibilidad, integridad y confidencialidad de la información?"),
+        ("7.14 Eliminación segura o reutilización de equipos", "¿Los elementos del equipo que contienen medios de almacenamiento se verifican para garantizar que todos los datos confidenciales y el software con licencia se han eliminado o sobrescrito de forma segura antes de su eliminación o reutilización?")
+    ]
+
+    for topic, text in questions_data:
+        Question.objects.create(
+            text=text,
+            classification=classification,
+            topic=topic
+        )
+
+    classification = Classification.objects.get(id=4)
+
+    questions_data = [
+        ("8.1 Dispositivos de punto final de usuario", "¿La información almacenada, procesada o accesible a través de los dispositivos finales del usuario está protegida?"),
+        ("8.2 Derechos de acceso privilegiado", "¿La asignación y uso de los derechos de acceso privilegiado está restringida y gestionada?"),
+        ("8.3 Restricción de acceso a la información", "¿El acceso a la información y otros activos asociados está restringido de acuerdo con la política específica del tema establecida sobre el control de acceso?"),
+        ("8.4 Acceso al código fuente", "¿El acceso de lectura y escritura al código fuente, las herramientas de desarrollo y las bibliotecas de software se gestiona adecuadamente?"),
+        ("8.5 Autenticación segura", "¿Las tecnologías y procedimientos de autenticación segura se han implementado en función de las restricciones de acceso a la información y la política específica del tema sobre el control de acceso?"),
+        ("8.6 Gestión de capacidad", "¿El uso de los recursos se controla y ajusta de acuerdo con los requisitos de capacidad actuales y previstos?"),
+        ("8.7 Protección contra malware", "¿La protección contra el malware se ha implementado y se respalda mediante la conciencia adecuada del usuario?"),
+        ("8.8 Gestión de vulnerabilidades técnicas", "¿Se obtiene información sobre las vulnerabilidades técnicas de los sistemas de información en uso, se evalúa la exposición de la organización a tales vulnerabilidades y se toman las medidas apropiadas?"),
+        ("8.9 Gestión de la configuración", "¿Las configuraciones, incluidas las configuraciones de seguridad, de hardware, software, servicios y redes se han establecido, documentado, implementado, monitoreado y revisado?"),
+        ("8.10 Eliminación de información", "¿La información almacenada en los sistemas de información, dispositivos o en cualquier otro medio de almacenamiento es eliminada cuando ya no es necesaria?"),
+        ("8.11 Enmascaramiento de datos", "¿El enmascaramiento de datos se utiliza de acuerdo con la política específica del tema de la organización sobre el control de acceso y otras políticas relacionadas, y los requisitos comerciales, teniendo en cuenta la legislación aplicable?"),
+        ("8.12 Prevención de fuga de datos", "¿Las medidas de prevención de fuga de datos se aplican a los sistemas, redes y cualquier otro dispositivo que procese, almacene o transmita información sensible?"),
+        ("8.13 Copia de seguridad de la información", "¿Las copias de seguridad de la información, el software y los sistemas se mantienen y prueban periódicamente de acuerdo con la política de copia de seguridad específica del tema acordada?"),
+        ("8.14 Redundancia de las instalaciones", "¿Las instalaciones de procesamiento de información se han implementado con suficiente redundancia para cumplir con los requisitos de disponibilidad?"),
+        ("8.15 Registro", "¿Se producen, almacenan, protegen y analizan registros que documentan actividades, excepciones, fallas y otros eventos relevantes?"),
+        ("8.16 Actividades de seguimiento", "¿Las redes, los sistemas y las aplicaciones son monitoreados por comportamiento anómalo y se toman las acciones apropiadas para evaluar posibles incidentes de seguridad de la información?"),
+        ("8.17 Sincronización de reloj", "¿Los relojes de los sistemas de procesamiento de información utilizados por la organización están sincronizados con las fuentes de tiempo aprobadas?"),
+        ("8.18 Uso de programas de utilidad privilegiados", "¿El uso de programas de utilidad que puedan anular los controles del sistema y de la aplicación está restringido y estrictamente controlado?"),
+        ("8.19 Instalación de software en sistemas operativos", "¿Se han implementado procedimientos y medidas para gestionar de forma segura la instalación de software en los sistemas operativos?"),
+        ("8.20 Seguridad en redes", "¿Las redes y los dispositivos de red se aseguran, administran y controlan para proteger la información en los sistemas y aplicaciones?"),
+        ("8.21 Seguridad de los servicios de red", "¿Se han identificado, implementado y controlado los mecanismos de seguridad, los niveles de servicio y los requisitos de servicio de los servicios de red?"),
+        ("8.22 Segregación de redes", "¿Los grupos de servicios de información, usuarios y sistemas de información están segregados en las redes de la organización?"),
+        ("8.23 Filtrado web", "¿El acceso a sitios web externos se gestiona para reducir la exposición a contenido malicioso?"),
+        ("8.24 Uso de criptografía", "¿Se han definido e implementado reglas para el uso efectivo de la criptografía, incluida la gestión de claves criptográficas?"),
+        ("8.25 Ciclo de vida de desarrollo seguro", "¿Se han establecido y aplicado reglas para el desarrollo seguro de software y sistemas?"),
+        ("8.26 Requisitos de seguridad de la aplicación", "¿Los requisitos de seguridad de la información se identifican, especifican y aprueban al desarrollar o adquirir aplicaciones?"),
+        ("8.27 Principios de arquitectura e ingeniería de sistemas seguros", "¿Se han establecido, documentado, mantenido y aplicado principios para la ingeniería de sistemas seguros en cualquier actividad de desarrollo de sistemas de información?"),
+        ("8.28 Codificación segura", "¿Los principios de codificación segura se aplican al desarrollo de software?"),
+        ("8.29 Pruebas de seguridad en desarrollo y aceptación", "¿Los procesos de pruebas de seguridad se han definido e implementado en el ciclo de vida del desarrollo?"),
+        ("8.30 Desarrollo subcontratado", "¿La organización dirige, monitorea y revisa las actividades relacionadas con el desarrollo de sistemas subcontratados?"),
+        ("8.31 Separación de entornos", "¿Los entornos de desarrollo, prueba y producción están separados y protegidos?"),
+        ("8.32 Gestión del cambio", "¿Los cambios en las instalaciones de procesamiento de información y los sistemas de información están sujetos a procedimientos de gestión de cambios?"),
+        ("8.33 Información de prueba", "¿La información de las pruebas se selecciona, protege y gestiona adecuadamente?"),
+        ("8.34 Protección durante pruebas de auditoría", "¿Las pruebas de auditoría y otras actividades de aseguramiento que involucran la evaluación de los sistemas operativos se planifican y acuerdan entre el evaluador y la gerencia correspondiente?")
+    ]
+
+
+    for topic, text in questions_data:
+        Question.objects.create(
+            text=text,
+            classification=classification,
+            topic=topic
+        )
+
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
